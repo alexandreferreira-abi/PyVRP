@@ -40,7 +40,8 @@ def plot_solution(
         **kwargs,
     )
 
-    colors = plt.get_cmap("tab10")
+    #colors = plt.get_cmap("tab10")
+    colors = plt.get_cmap("tab20")
     in_solution = np.zeros(data.num_locations, dtype=bool)
     for idx, route in enumerate(solution.routes()):
         color = colors(idx)
