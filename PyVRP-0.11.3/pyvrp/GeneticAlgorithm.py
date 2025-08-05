@@ -21,6 +21,9 @@ if TYPE_CHECKING:
     from pyvrp.stop.StoppingCriterion import StoppingCriterion
 
 
+from pyvrp.logger import create_custom_logger ## added ##
+
+
 @dataclass
 class GeneticAlgorithmParams:
     """
@@ -157,6 +160,9 @@ class GeneticAlgorithm:
             A Result object, containing statistics (if collected) and the best
             found solution.
         """
+
+        run_logger = create_custom_logger("ga_run_logger", filename_prefix="run") ## added ##
+
         print_progress = ProgressPrinter(should_print=display)
         print_progress.start(self._data)
 
@@ -170,6 +176,8 @@ class GeneticAlgorithm:
 
         while not stop(self._cost_evaluator.cost(self._best)):
             iters += 1
+
+            run_logger.info(f"Iteration {iters}") ## added ##
 
             if iters_no_improvement == self._params.nb_iter_no_improvement:
                 print_progress.restart()
