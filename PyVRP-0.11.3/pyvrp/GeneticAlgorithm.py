@@ -22,6 +22,7 @@ if TYPE_CHECKING:
 
 
 from pyvrp.logger import create_custom_logger ## added ##
+from pathlib import Path ## added ##
 
 
 @dataclass
@@ -136,7 +137,7 @@ class GeneticAlgorithm:
         self,
         stop: StoppingCriterion,
         collect_stats: bool = True,
-        display: bool = False,
+        display: bool = False
     ):
         """
         Runs the genetic algorithm with the provided stopping criterion.
@@ -162,7 +163,7 @@ class GeneticAlgorithm:
         """
 
         run_logger = create_custom_logger("ga_run_logger", filename_prefix="run") ## added ##
-
+        
         print_progress = ProgressPrinter(should_print=display)
         print_progress.start(self._data)
 
@@ -178,6 +179,9 @@ class GeneticAlgorithm:
             iters += 1
 
             run_logger.info(f"Iteration {iters}") ## added ##
+
+            with open(run_logger.latest_iter_path, "w") as f: ## added ##
+                f.write(str(iters)) 
 
             if iters_no_improvement == self._params.nb_iter_no_improvement:
                 print_progress.restart()
