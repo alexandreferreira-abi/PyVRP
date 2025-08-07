@@ -60,6 +60,8 @@ def create_custom_logger(
     logger.latest_iter_path = iter_txt_path
     iter_txt_path.touch(exist_ok=True)
 
+    logger.info("Logger initialized.")
+
     return logger
 
 
