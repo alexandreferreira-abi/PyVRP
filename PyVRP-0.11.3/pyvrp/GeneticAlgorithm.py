@@ -19,7 +19,8 @@ if TYPE_CHECKING:
     )
     from pyvrp.search.SearchMethod import SearchMethod
     from pyvrp.stop.StoppingCriterion import StoppingCriterion
-
+    
+    import logging ## added ##
 
 from pyvrp.logger import create_custom_logger ## added ##
 from pathlib import Path ## added ##
@@ -96,6 +97,7 @@ class GeneticAlgorithm:
 
     def __init__(
         self,
+        logger: logging.Logger, ## added ##
         data: ProblemData,
         penalty_manager: PenaltyManager,
         rng: RandomNumberGenerator,
@@ -111,7 +113,7 @@ class GeneticAlgorithm:
             Solution,
         ],
         initial_solutions: Collection[Solution],
-        params: GeneticAlgorithmParams = GeneticAlgorithmParams(),
+        params: GeneticAlgorithmParams = GeneticAlgorithmParams()
     ):
         if len(initial_solutions) == 0:
             raise ValueError("Expected at least one initial solution.")
@@ -124,6 +126,7 @@ class GeneticAlgorithm:
         self._crossover = crossover_op
         self._initial_solutions = initial_solutions
         self._params = params
+        self._logger = logger ## added ##
 
         # Find best feasible initial solution if any exist, else set a random
         # infeasible solution (with infinite cost) as the initial best.
@@ -162,7 +165,7 @@ class GeneticAlgorithm:
             found solution.
         """
 
-        run_logger = create_custom_logger("ga_run_logger", filename_prefix="run") ## added ##
+        run_logger = self._logger ## added ##
         
         print_progress = ProgressPrinter(should_print=display)
         print_progress.start(self._data)

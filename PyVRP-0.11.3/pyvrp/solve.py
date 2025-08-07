@@ -24,6 +24,7 @@ from pyvrp.search import (
 
 if TYPE_CHECKING:
     import pathlib
+    import logging ## added ##
 
     from pyvrp.Result import Result
     from pyvrp.stop import StoppingCriterion
@@ -127,6 +128,7 @@ class SolveParams:
 
 
 def solve(
+    logger: logging.Logger, ## added ##    
     data: ProblemData,
     stop: StoppingCriterion,
     seed: int = 0,
@@ -181,6 +183,6 @@ def solve(
     # We use SREX when the instance is a proper VRP; else OX for TSP.
     crossover = srex if data.num_vehicles > 1 else ox
 
-    gen_args = (data, pm, rng, pop, ls, crossover, init, params.genetic)
+    gen_args = (data, pm, rng, pop, ls, crossover, init, params.genetic, logger) ## change ##
     algo = GeneticAlgorithm(*gen_args)  # type: ignore
     return algo.run(stop, collect_stats, display)
