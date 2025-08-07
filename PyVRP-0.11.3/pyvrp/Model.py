@@ -19,7 +19,7 @@ from pyvrp.solve import SolveParams, solve
 if TYPE_CHECKING:
     from pyvrp.Result import Result
     from pyvrp.stop import StoppingCriterion
-
+    import logging ## added ##
 
 class Edge:
     """
@@ -472,6 +472,7 @@ class Model:
         collect_stats: bool = True,
         display: bool = True,
         params: SolveParams = SolveParams(),
+        logger: logging.Logger | None = None ## added ##
     ) -> Result:
         """
         Solve this model.
@@ -492,13 +493,18 @@ class Model:
         params
             Solver parameters to use. If not provided, a default will be used.
 
+        logger: logging.Logger or None, optional
+            Optional logger to track progress. If provided, the solver logs each iteration
+            and writes the latest iteration number to a .txt file (via `create_custom_logger`).
+            If None, no logging will be done.
+
         Returns
         -------
         Result
             A Result object, containing statistics (if collected) and the best
             found solution.
         """
-        return solve(self.data(), stop, seed, collect_stats, display, params)
+        return solve(self.data(), stop, seed, collect_stats, display, params, logger) ## changed ##
 
 
 def _idx_by_id(item: object, container: Sequence[object]) -> int | None:

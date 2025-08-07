@@ -87,6 +87,11 @@ class GeneticAlgorithm:
         Initial solutions to use to initialise the population.
     params
         Genetic algorithm parameters. If not provided, a default will be used.
+    
+    logger: logging.Logger or None, optional
+        Optional logger to track progress. If provided, the solver logs each iteration
+        and writes the latest iteration number to a .txt file (via `create_custom_logger`).
+        If None, no logging will be done.
 
     Raises
     ------

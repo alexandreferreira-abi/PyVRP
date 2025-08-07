@@ -157,6 +157,12 @@ def solve(
     params
         Solver parameters to use. If not provided, a default will be used.
 
+    logger: logging.Logger or None, optional
+        Optional logger to track progress. If provided, the solver logs each iteration
+        and writes the latest iteration number to a .txt file (via `create_custom_logger`).
+        If None, no logging will be done.
+
+
     Returns
     -------
     Result
@@ -183,6 +189,6 @@ def solve(
     # We use SREX when the instance is a proper VRP; else OX for TSP.
     crossover = srex if data.num_vehicles > 1 else ox
 
-    gen_args = (data, pm, rng, pop, ls, crossover, init, params.genetic, logger) ## change ##
+    gen_args = (data, pm, rng, pop, ls, crossover, init, params.genetic, logger) ## changed ##
     algo = GeneticAlgorithm(*gen_args)  # type: ignore
     return algo.run(stop, collect_stats, display)
