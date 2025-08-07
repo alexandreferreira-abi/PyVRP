@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     
     import logging ## added ##
 
-from pyvrp.Logger import get_null_logger ## added ##
+from pyvrp.logger import get_null_logger ## added ##
 
 
 @dataclass
