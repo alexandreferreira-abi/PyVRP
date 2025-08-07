@@ -22,8 +22,7 @@ if TYPE_CHECKING:
     
     import logging ## added ##
 
-from pyvrp.logger import create_custom_logger ## added ##
-from pathlib import Path ## added ##
+from pyvrp.Logger import get_null_logger ## added ##
 
 
 @dataclass
@@ -97,7 +96,6 @@ class GeneticAlgorithm:
 
     def __init__(
         self,
-        logger: logging.Logger, ## added ##
         data: ProblemData,
         penalty_manager: PenaltyManager,
         rng: RandomNumberGenerator,
@@ -113,7 +111,8 @@ class GeneticAlgorithm:
             Solution,
         ],
         initial_solutions: Collection[Solution],
-        params: GeneticAlgorithmParams = GeneticAlgorithmParams()
+        params: GeneticAlgorithmParams = GeneticAlgorithmParams(),
+        logger: logging.Logger | None = None ## added ##
     ):
         if len(initial_solutions) == 0:
             raise ValueError("Expected at least one initial solution.")
@@ -126,7 +125,7 @@ class GeneticAlgorithm:
         self._crossover = crossover_op
         self._initial_solutions = initial_solutions
         self._params = params
-        self._logger = logger ## added ##
+        self._logger = logger or get_null_logger()  ## added ##
 
         # Find best feasible initial solution if any exist, else set a random
         # infeasible solution (with infinite cost) as the initial best.
@@ -164,9 +163,7 @@ class GeneticAlgorithm:
             A Result object, containing statistics (if collected) and the best
             found solution.
         """
-
-        run_logger = self._logger ## added ##
-        
+      
         print_progress = ProgressPrinter(should_print=display)
         print_progress.start(self._data)
 
@@ -181,10 +178,11 @@ class GeneticAlgorithm:
         while not stop(self._cost_evaluator.cost(self._best)):
             iters += 1
 
-            run_logger.info(f"Iteration {iters}") ## added ##
+            self._logger.info(f"Iteration {iters}") ## added ##
 
-            with open(run_logger.latest_iter_path, "w") as f: ## added ##
-                f.write(str(iters)) 
+            if hasattr(self._logger, "latest_iter_path"): ## added ##
+                with open(self._logger.latest_iter_path, "w") as f: ## added ##
+                    f.write(str(iters)) ## added ##
 
             if iters_no_improvement == self._params.nb_iter_no_improvement:
                 print_progress.restart()

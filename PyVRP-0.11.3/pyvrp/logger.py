@@ -1,6 +1,5 @@
 import os
 import logging
-from datetime import datetime
 from pathlib import Path
 
 
@@ -63,3 +62,33 @@ def create_custom_logger(
 
     return logger
 
+
+def get_null_logger(name="null"):
+    
+    """
+    Returns a logger that silently ignores all log messages.
+
+    This utility is useful as a fallback when no logger is explicitly provided,
+    allowing logging calls to be safely executed without requiring setup.
+
+    Parameters
+    ----------
+    name : str
+        Name for the null logger. Default is "null".
+
+    Returns
+    -------
+    logging.Logger
+        A logger instance with a NullHandler, which discards all messages.
+        The logger also has propagation disabled to prevent bubbling to root handlers.
+
+    Notes
+    -----
+    - If the logger already has handlers, no new ones are added.
+    - This is ideal for optional logging in library functions.
+    """
+    
+    null_logger = logging.getLogger(name)
+    null_logger.addHandler(logging.NullHandler())
+    null_logger.propagate = False
+    return null_logger

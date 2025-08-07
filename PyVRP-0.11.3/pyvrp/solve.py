@@ -127,14 +127,14 @@ class SolveParams:
         )
 
 
-def solve(
-    logger: logging.Logger, ## added ##    
+def solve(  
     data: ProblemData,
     stop: StoppingCriterion,
     seed: int = 0,
     collect_stats: bool = True,
     display: bool = False,
     params: SolveParams = SolveParams(),
+    logger: logging.Logger | None = None ## added ##
 ) -> Result:
     """
     Solves the given problem data instance.
