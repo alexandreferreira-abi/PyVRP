@@ -53,10 +53,10 @@ def create_custom_logger(
     logger.addHandler(file_handler)
 
     # Optional: console logging (you can skip this)
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
+    #console_handler = logging.StreamHandler()
+    #console_handler.setLevel(logging.INFO)
+    #console_handler.setFormatter(formatter)
+    #logger.addHandler(console_handler)
 
     logger.log_path = log_path
     logger.latest_iter_path = iter_txt_path
