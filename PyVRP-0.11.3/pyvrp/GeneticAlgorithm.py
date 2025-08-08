@@ -215,7 +215,7 @@ class GeneticAlgorithm:
 
             if hasattr(self._logger, "latest_iter_path"): ## added ##
                 with open(self._logger.latest_iter_path, "w") as f: ## added ##
-                    f.write(f"iters: {str(iters)}") ## added ##
+                    f.write(f"iters: {str(iters)} ") ## added ##
                     f.write(f"feas_size: {str(feas_size)}") ## added ## 
 
         end = time.perf_counter() - start
