@@ -183,12 +183,6 @@ class GeneticAlgorithm:
         while not stop(self._cost_evaluator.cost(self._best)):
             iters += 1
 
-            self._logger.info(f"Iteration {iters}") ## added ##
-
-            if hasattr(self._logger, "latest_iter_path"): ## added ##
-                with open(self._logger.latest_iter_path, "w") as f: ## added ##
-                    f.write(str(iters)) ## added ##
-
             if iters_no_improvement == self._params.nb_iter_no_improvement:
                 print_progress.restart()
 
@@ -215,6 +209,14 @@ class GeneticAlgorithm:
 
             stats.collect_from(self._pop, self._cost_evaluator)
             print_progress.iteration(stats)
+
+            feas_size = stats.feas_stats[-1].size ## added ##
+            self._logger.info(f"Iteration {iters}, Feasibility Size {feas_size}") ## added ##
+
+            if hasattr(self._logger, "latest_iter_path"): ## added ##
+                with open(self._logger.latest_iter_path, "w") as f: ## added ##
+                    f.write(f"iters: {str(iters)}") ## added ##
+                    f.write(f"feas_size: {str(feas_size)}") ## added ## 
 
         end = time.perf_counter() - start
         res = Result(self._best, stats, iters, end)
