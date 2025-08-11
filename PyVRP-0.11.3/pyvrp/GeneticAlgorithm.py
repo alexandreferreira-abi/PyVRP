@@ -214,9 +214,11 @@ class GeneticAlgorithm:
             self._logger.info(f"Iteration {iters}, Feasibility Size {feas_size}") ## added ##
 
             if hasattr(self._logger, "latest_iter_path"): ## added ##
-                with open(self._logger.latest_iter_path, "w") as f: ## added ##
-                    f.write(f"iters: {str(iters)} ") ## added ##
-                    f.write(f"feas_size: {str(feas_size)}") ## added ## 
+                #with open(self._logger.latest_iter_path, "w") as f: ## added ##
+                #    f.write(f"iters: {str(iters)} ") ## added ##
+                #    f.write(f"feas_size: {str(feas_size)}") ## added ## 
+                with open(self._logger.latest_iter_path, "a", encoding="utf-8") as f: ## added ##
+                    print(f"iters:{iters} feas_size:{feas_size}", file=f) ## added ##
 
         end = time.perf_counter() - start
         res = Result(self._best, stats, iters, end)
