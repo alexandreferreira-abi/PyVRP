@@ -217,8 +217,23 @@ class GeneticAlgorithm:
                 #with open(self._logger.latest_iter_path, "w") as f: ## added ##
                 #    f.write(f"iters: {str(iters)} ") ## added ##
                 #    f.write(f"feas_size: {str(feas_size)}") ## added ## 
-                with open(self._logger.latest_iter_path, "a", encoding="utf-8") as f: ## added ##
-                    print(f"iters:{iters} feas_size:{feas_size}", file=f) ## added ##
+                #with open(self._logger.latest_iter_path, "a", encoding="utf-8") as f: ## added 2 ##
+                #    print(f"iters:{iters} feas_size:{feas_size}", file=f) ## added 2 ##
+
+                ## added 3 - start ##    
+                path = self._logger.latest_iter_path
+
+                try:
+                    with open(path, "r", encoding="utf-8") as f:
+                        old = f.read()
+                except FileNotFoundError:
+                    old = ""
+
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(old)
+                    f.write(f"iters:{iters} feas_size:{feas_size}\n")
+                ## added 3 - end ## 
+
 
         end = time.perf_counter() - start
         res = Result(self._best, stats, iters, end)
