@@ -20,6 +20,10 @@ if TYPE_CHECKING:
     from pyvrp.search.SearchMethod import SearchMethod
     from pyvrp.stop.StoppingCriterion import StoppingCriterion
 
+import logging ## added ##
+
+from pyvrp.logger import get_null_logger ## added ##
+
 
 @dataclass
 class GeneticAlgorithmParams:
@@ -108,6 +112,7 @@ class GeneticAlgorithm:
         ],
         initial_solutions: Collection[Solution],
         params: GeneticAlgorithmParams = GeneticAlgorithmParams(),
+        logger: logging.Logger | None = None ## added ##
     ):
         if len(initial_solutions) == 0:
             raise ValueError("Expected at least one initial solution.")
@@ -120,6 +125,7 @@ class GeneticAlgorithm:
         self._crossover = crossover_op
         self._initial_solutions = initial_solutions
         self._params = params
+        self._logger = logger or get_null_logger()  ## added ##
 
         # Find best feasible initial solution if any exist, else set a random
         # infeasible solution (with infinite cost) as the initial best.
@@ -200,6 +206,26 @@ class GeneticAlgorithm:
 
             stats.collect_from(self._pop, self._cost_evaluator)
             print_progress.iteration(stats)
+
+            feas_size = stats.feas_stats[-1].size ## added ##
+            self._logger.info(f"Iteration {iters}, Feasibility Size {feas_size}") ## added ##
+
+            if hasattr(self._logger, "latest_iter_path"): ## added ##
+                
+                ## added 3 - start ##    
+                path = self._logger.latest_iter_path
+
+                try:
+                    with open(path, "r", encoding="utf-8") as f:
+                        old = f.read()
+                except FileNotFoundError:
+                    old = ""
+
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(old)
+                    f.write(f"iters:{iters} feas_size:{feas_size}\n")
+                ## added 3 - end ## 
+
 
         end = time.perf_counter() - start
         res = Result(self._best, stats, iters, end)

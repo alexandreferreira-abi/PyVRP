@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from tracemalloc import stop
 from typing import TYPE_CHECKING, Sequence
 from warnings import warn
 
@@ -19,6 +20,8 @@ from pyvrp.solve import SolveParams, solve
 if TYPE_CHECKING:
     from pyvrp.Result import Result
     from pyvrp.stop import StoppingCriterion
+
+import logging ## added ##
 
 
 class Edge:
@@ -490,6 +493,7 @@ class Model:
         display: bool = True,
         params: SolveParams = SolveParams(),
         missing_value: int = MAX_VALUE,
+        logger: logging.Logger | None = None ## added ##
     ) -> Result:
         """
         Solve this model.
@@ -520,8 +524,9 @@ class Model:
             found solution.
         """
         data = self.data(missing_value)
-        return solve(data, stop, seed, collect_stats, display, params)
-
+        #return solve(data, stop, seed, collect_stats, display, params)
+        return solve(data, stop, seed, collect_stats, display, params, logger=logger) ## changed ##
+    
 
 def _idx_by_id(item: object, container: Sequence[object]) -> int | None:
     """
